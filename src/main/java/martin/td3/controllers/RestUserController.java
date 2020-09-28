@@ -24,10 +24,13 @@ import martin.td3.repositories.UserRepository;
 @RequestMapping("/user")
 public class RestUserController extends RestMainController<User>{
 	
+	protected UserRepository userRepo;
+
 	@Autowired
-	private UserRepository userRepo;
+	public RestUserController(UserRepository userRepo) {
+		super(userRepo);
+	}
 	
-	@Override
 	@GetMapping(value={"","/","index"})
 	public @ResponseBody List<User> index() {
 		return userRepo.findAll();

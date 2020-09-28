@@ -17,13 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import martin.td3.models.Organization;
 import martin.td3.repositories.OrgaRepository;
+import martin.td3.repositories.UserRepository;
 
 @RestController
 @RequestMapping(value={"/orga","/orgas"})
 public class RestOrgaController extends RestMainController<Organization> {
 	
+	protected OrgaRepository orgaRepo;
+	
 	@Autowired
-	private OrgaRepository orgaRepo;
+	public RestOrgaController(OrgaRepository orgaRepo) {
+		super(orgaRepo);
+	}
 	
 	@GetMapping(value={"","/","index"})
 	public @ResponseBody List<Organization> index() {

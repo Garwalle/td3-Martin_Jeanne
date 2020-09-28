@@ -22,8 +22,12 @@ import martin.td3.repositories.OrgaRepository;
 @RestController
 public class RestMainController<T> {
 	
+	protected JpaRepository<T, Integer> repo;
+
 	@Autowired
-	private JpaRepository<T, Integer> repo;
+	public RestMainController(JpaRepository<T, Integer> repo) {
+		this.repo = repo;
+	}
 	
 	@GetMapping(value={"","/","index"})
 	public @ResponseBody List<T> index() {
