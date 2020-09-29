@@ -3,24 +3,19 @@ package martin.td3.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import martin.td3.models.Organization;
-import martin.td3.repositories.OrgaRepository;
-
-@RestController
-public class RestMainController<T> {
+abstract public class RestMainController<T> {
 	
 	protected JpaRepository<T, Integer> repo;
 
@@ -46,28 +41,23 @@ public class RestMainController<T> {
 		repo.saveAndFlush(t);
 		return t;
 	}
+		
 	
-	// UPDATE NE PEUT PAS ETRE EXTEND, A FAIRE MANUELLEMENT SUR LES CLASSES
-	
-	/*
 	@PatchMapping("{id}")
-	public @ResponseBody Organization updateOrga(@PathVariable int id,
-			@Param("name") Optional<String> name,
-			@Param("domain") Optional<String> domain,
-			@Param("aliases") Optional<String> aliases) {
-		Optional<Organization> opt = repo.findById(id);
-		Organization toUpdateOrga = null;
+	public @ResponseBody T update(@PathVariable int id,
+			HttpServletRequest request) {
+		Optional<T> opt = repo.findById(id);
+		T toUpdateObject = null;
 		if(opt.isPresent()) {
-			toUpdateOrga = opt.get();
-			if (name.isPresent()) { toUpdateOrga.setName(name.get()); }
-			if (domain.isPresent()) { toUpdateOrga.setDomain(domain.get()); }
-			if (aliases.isPresent()) { toUpdateOrga.setAliases(aliases.get()); }
-			repo.saveAndFlush(toUpdateOrga);
+			toUpdateObject = opt.get();
+			updateObject(toUpdateObject,request);
+			repo.saveAndFlush(toUpdateObject);
 		}
-		return toUpdateOrga;
+		return toUpdateObject;
 	}
-	*/
 	
+	protected abstract void updateObject(T toUpdateObject, HttpServletRequest request);
+
 	@DeleteMapping("{id}")
 	public @ResponseBody T delete(@PathVariable int id) {
 		Optional<T> opt = repo.findById(id);
