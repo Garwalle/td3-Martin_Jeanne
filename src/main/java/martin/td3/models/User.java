@@ -29,7 +29,7 @@ public class User {
 	private List<Groupe> groupes;
 
 	public User() {
-		this(null);
+		this(null,null);
 	}
 
 	public User(Organization organization) {
